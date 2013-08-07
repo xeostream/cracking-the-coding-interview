@@ -28,7 +28,6 @@ main()
 	for (; n < 11; n++) {
 		Node *nod = initNode(test[n]);
 		push(nod, stack, min);
-		//printf("%d\n", (min->top)->data);
 	}
 	for (; n > 3; n--) {
 		printf("%d %d\n", (stack->top)->data, (min->top)->data);
@@ -61,7 +60,8 @@ void push(Node *node, Stack *stack, Stack *min)
 	stack->top = node;
 	(stack->size)++;
 	if (node->data <= (min->top)->data) {
-		pushMin(node, min);
+		Node *temp = initNode(node->data);
+		pushMin(temp, min);
 	}
 }
 

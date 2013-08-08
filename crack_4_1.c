@@ -4,55 +4,77 @@
 #include <string.h>
 
 typedef struct tnode {
-	char *word;
-	int count;
+	int data;
 	struct tnode *left, *right;
 } tnode;
 
-tnode *addTree(tnode *, char *);
+tnode *addTree(tnode *, int);
 void treeprint(tnode *);
 void treeprint1(tnode *);
 void treeprint2(tnode *);
+void getDepth(tnode *, int[]);
+int isBalance(int[]);
 
 main()
 {
-	char *items[10] = {  
-    "Today","Tomorrow","Tuck","Hello","Mystery","today",  
-    "Tuck","Hello","Monday","Monday" 
+	int items[10] = {  
+    1, 3, 5, 7, 9, 8, 6, 4, 2, 0
 	};
+	int result[10];
 	int n = 0;
 	tnode *root = NULL;
 	for (; n < 10; n++)
 		 root = addTree(root, items[n]);
- 	treeprint(root);
- 	printf("------------------------------------\n");
- 	treeprint1(root);
- 	printf("------------------------------------\n");
- 	treeprint2(root);
+ 	getDepth(root, result);
+ 	if (isBalance(result) == 1)
+ 		printf("Yes\n");
+	else
+		printf("No\n");
 	return 0;
 }
 
-tnode *addTree(tnode *root, char *word)
+tnode *addTree(tnode *root, int data)
 {
-	int cond;
 	if (root == NULL) {
 		root = (tnode *)malloc(sizeof(tnode));
-		root->word = strdup(word);
-		root->count = 1;
+		root->data = data;
 		root->left = root->right = NULL;
-	} else if ((cond = strcmp(word, root->word)) == 0)
-		root->count++;
-	else if (cond < 0)
-		root->left = addTree(root->left, word);
+	} else if (root->data < data)
+		root->left = addTree(root->left, data);
 	else
-		root->right = addTree(root->right, word);
+		root->right = addTree(root->right, data);
 	return root;
+}
+
+int size = 0, conf = 0;
+void getDepth(tnode *root, int result[])
+{
+	if (root == NULL) return ;
+	size++;
+	getDepth(root->left, result);
+	if (root->left == NULL && root->right == NULL)
+		result[conf++] = size;
+	getDepth(root->right, result);
+	size--;	
+}
+
+int isBalance(int result[])
+{
+	int max, min;
+	max = min = result[0];
+	for (; conf > 1; conf--) {
+		if (max < result[conf-1])
+			max = result[conf-1];
+		if (min > result[conf-1])
+			min = result[conf-1];
+	}
+	return (max-min) > 1 ? 0 : 1;	
 }
 
 void treeprint(tnode *root)
 {
 	if (root == NULL) return ;
-	printf("%s: %d\n", root->word, root->count);
+	printf("%d\n", root->data);
 	treeprint(root->left);
 	treeprint(root->right);
 }
@@ -61,7 +83,7 @@ void treeprint1(tnode *root)
 {
 	if (root == NULL) return ;
 	treeprint1(root->left);
-	printf("%s: %d\n", root->word, root->count);
+	printf("%d\n", root->data);
 	treeprint1(root->right);
 }
 
@@ -70,5 +92,5 @@ void treeprint2(tnode *root)
 	if (root == NULL) return ;
 	treeprint2(root->left);
 	treeprint2(root->right);
-	printf("%s: %d\n", root->word, root->count);
+	printf("%d\n", root->data);
 }

@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAXSIZE 100
-
-/*遍历图中节点，以发现两点之间是否有路径
-*使用队列存储节点，通过bfs进行查找，目前
-没有好办法表示图*/
  
 typedef struct Queue {
 	int head;
